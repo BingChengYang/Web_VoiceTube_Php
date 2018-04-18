@@ -61,6 +61,8 @@ function onPlayerStateChange(event) {
 }
 
 function playCaptions(a, b){
+  a = Number(a);
+  b = Number(b);
   player.setVolume(50);
     player.seekTo(a, true);
     if(player.getPlayerState() ==2 || player.getPlayerState== -1)

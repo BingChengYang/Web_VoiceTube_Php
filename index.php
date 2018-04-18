@@ -1,224 +1,32 @@
 <?php
+# Load JSON Data
+$contentPath = "content.JSON";
+$adPath = "ad.JSON";
+try
+{
+  # Load content from JSON file
+  if(is_readable($contentPath))  
+    $jContent = file_get_contents($contentPath);
+  else                           
+    throw new Exception("Cannot load content!");
 
-# JSON string for Ads
-$jAd = <<<STRING
-[{
-    "href" : "/lessons/71?apilang=zh_tw",
-    "title" : "每天堅持5分鐘，1個月後大不同！",
-    "company" : "EF English Live 提供"
-},{
-  "href" : "/lessons/44?apilang=zh_tw",
-  "title" : "【免費體驗】5分鐘檢測英文能力",
-  "company" : "VoiceTube 提供"
-},{
-  "href" : "/lessons/89?apilang=zh_tw",
-  "title" : "每天25分鐘，聽懂CNN",
-  "company" : "EF English Live 提供"
-},{
-  "href" : "/lessons/94?apilang=zh_tw",
-  "title" : "你知道錯在哪嗎？﹥﹥看答案",
-  "company" : "EF English Live 提供"
-}]
-STRING;
+  # Read ad from JSON file
+  if(is_readable($adPath))  
+    $jAd = file_get_contents($adPath);
+  else                           
+    throw new Exception("Cannot load ad!");
 
-# JSON string for Contents
-$jContent = <<<STRING
-[{
-    "data_video_id" : "ocUNn6KUN6k",
-    "a_href" : "player.php?id=ocUNn6KUN6k&file=caption_ocUNn6KUN6k",
-    "img_src" : "https://cdn.voicetube.com/assets/thumbnails/ocUNn6KUN6k_s.jpg",
-    "img_alt" : "看起來好嚴肅！老照片裡的人都不笑的原因？ (Why people never smiled in old photos) Image",
-    "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-    "img_readed_alt" : " ",
-    "img_readed_rel" : "tooltip",
-    "img_readed_data_original_title" : "Watched",
-    "video_time" : "03:20",
-    "data_original_title" : "看起來好嚴肅！老照片裡的人都不笑的原因？ (Why people never smiled in old photos)",
-    "h5_a_href" : "看起來好嚴肅！老照片裡的人都不笑的原因？ (Why people never smiled…",
-    "view" : "955 views",
-    "level" : "中級",
-    "level_href" : "/all/2/?ref=badge",
-    "chinese_caption" : "中文",
-    "chinese_tag" : "有中文字幕",
-    "chinese_href" : "/channel/translated?ref=badge",
-    "pronounciation" : "美國腔",
-    "pronounciation_tag" : "美國腔",
-    "pronounciation_href" : "/all/0?accent=us&amp;ref=badge"
-
-},{
-  "data_video_id" : "r5_ZSnFDPRg",
-  "a_href" : "player.php?id=r5_ZSnFDPRg&file=caption_r5_ZSnFDPRg",
-  "img_src" : "https://cdn.voicetube.com/assets/thumbnails/r5_ZSnFDPRg_s.jpg",
-  "img_alt" : "【TED-Ed】鳥類究竟如何學會歌唱？(How do birds learn to sing? - Partha P. Mitra) (TED-Ed How do birds learn to sing? - Partha P. Mitra) Image",
-  "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-  "img_readed_alt" : " ",
-  "img_readed_rel" : "tooltip",
-  "img_readed_data_original_title" : "Watched",
-  "video_time" : "05:39",
-  "data_original_title" : "【TED-Ed】鳥類究竟如何學會歌唱？(How do birds learn to sing? - Partha P. Mitra) (TED-Ed How do birds learn to sing? - Partha P. Mitra)",
-  "h5_a_href" : "【TED-Ed】鳥類究竟如何學會歌唱？(How do birds learn to sing?… ",
-  "view" : "2096 views",
-  "level" : "中級",
-  "level_href" : "/all/2/?ref=badge",
-  "chinese_caption" : "中文",
-  "chinese_tag" : "有中文字幕",
-  "chinese_href" : "/channel/translated?ref=badge",
-  "pronounciation" : "美國腔",
-  "pronounciation_tag" : "美國腔",
-  "pronounciation_href" : "/all/0?accent=us&amp;ref=badge"
-},{
-  "data_video_id" : "cr_Zu6nx2kU",
-  "a_href" : "player.php?id=cr_Zu6nx2kU&file=caption_cr_Zu6nx2kU",
-  "img_src" : "https://cdn.voicetube.com/assets/thumbnails/cr_Zu6nx2kU_s.jpg",
-  "img_alt" : "認識維生素 B12 (Vitamin B12: Questions Answered) Image",
-  "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-  "img_readed_alt" : " ",
-  "img_readed_rel" : "tooltip",
-  "img_readed_data_original_title" : "Watched",
-  "video_time" : "12:36",
-  "data_original_title" : "認識維生素 B12 (Vitamin B12: Questions Answered)",
-  "h5_a_href" : "認識維生素 B12 (Vitamin B12: Questions Answered)",
-  "view" : "999 views",
-  "level" : "中級",
-  "level_href" : "/all/2/?ref=badge",
-  "chinese_caption" : "中文",
-  "chinese_tag" : "有中文字幕",
-  "chinese_href" : "/channel/translated?ref=badge",
-  "pronounciation" : "其他腔",
-  "pronounciation_tag" : "其他腔",
-  "pronounciation_href" : "/all/0?accent=other&amp;ref=badge"
-},{
-  "data_video_id" : "4A6XkYpmidU",
-  "a_href" : "player.php?id=4A6XkYpmidU&file=caption_4A6XkYpmidU",
-  "img_src" : "https://cdn.voicetube.com/assets/thumbnails/4A6XkYpmidU_s.jpg",
-  "img_alt" : "如果人永遠不刷牙會怎樣？ (What Would Happen If You Never Brushed Your Teeth?) Image",
-  "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-  "img_readed_alt" : " ",
-  "img_readed_rel" : "tooltip",
-  "img_readed_data_original_title" : "Watched",
-  "video_time" : "03:09",
-  "data_original_title" : "如果人永遠不刷牙會怎樣？ (What Would Happen If You Never Brushed Your Teeth?)",
-  "h5_a_href" : "如果人永遠不刷牙會怎樣？ (What Would Happen If You Never Brushed…",
-  "view" : "6834 views",
-  "level" : "中級",
-  "level_href" : "/all/2/?ref=badge",
-  "chinese_caption" : "中文",
-  "chinese_tag" : "有中文字幕",
-  "chinese_href" : "/channel/translated?ref=badge",
-  "pronounciation" : "美國腔",
-  "pronounciation_tag" : "美國腔",
-  "pronounciation_href" : "/all/0?accent=us&amp;ref=badge"
-},{
-  "data_video_id" : "M2dBuAPk3Z0",
-  "a_href" : "player.php?id=M2dBuAPk3Z0&file=caption_M2dBuAPk3Z0",
-  "img_src" : "https://cdn.voicetube.com/assets/thumbnails/M2dBuAPk3Z0_s.jpg",
-  "img_alt" : "台灣人超會用英文把妹？實測 Goodnight 給你看 (Can Taiwanese people pick up girls in English?) Image",
-  "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-  "img_readed_alt" : " ",
-  "img_readed_rel" : "tooltip",
-  "img_readed_data_original_title" : "Watched",
-  "video_time" : "03:40",
-  "data_original_title" : "台灣人超會用英文把妹？實測 Goodnight 給你看 (Can Taiwanese people pick up girls in English?)",
-  "h5_a_href" : "台灣人超會用英文把妹？實測 Goodnight 給你看 (Can Taiwanese people…台灣人超會用英文把妹？實測 Goodnight 給你看 (Can Taiwanese people…",
-  "view" : "6190 views",
-  "level" : "初級",
-  "level_href" : "/all/1/?ref=badge",
-  "chinese_caption" : "中文",
-  "chinese_tag" : "有中文字幕",
-  "chinese_href" : "/channel/translated?ref=badge",
-  "pronounciation" : "其他腔",
-  "pronounciation_tag" : "其他腔",
-  "pronounciation_href" : "/all/0?accent=other&amp;ref=badge"
-},{
-  "data_video_id" : "XsmpboIHVYw",
-  "a_href" : "player.php?id=XsmpboIHVYw&file=caption_XsmpboIHVYw",
-  "img_src" : "https://cdn.voicetube.com/assets/thumbnails/XsmpboIHVYw_s.jpg",
-  "img_alt" : "身為一個三語者，你可以...當面說人家的壞話！原來好處還不止這個而已 (I'm Trilingual) Image",
-  "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-  "img_readed_alt" : " ",
-  "img_readed_rel" : "tooltip",
-  "img_readed_data_original_title" : "Watched",
-  "video_time" : "03:55",
-  "data_original_title" : "身為一個三語者，你可以...當面說人家的壞話！原來好處還不止這個而已 (I'm Trilingual)",
-  "h5_a_href" : "身為一個三語者，你可以...當面說人家的壞話！原來好處還不止這個而已 (I'm Trilingual)",
-  "view" : "5081 views",
-  "level" : "初級",
-  "level_href" : "/all/1/?ref=badge",
-  "chinese_caption" : "中文",
-  "chinese_tag" : "有中文字幕",
-  "chinese_href" : "/channel/translated?ref=badge",
-  "pronounciation" : "美國腔",
-  "pronounciation_tag" : "美國腔",
-  "pronounciation_href" : "/all/0?accent=us&amp;ref=badge"
-},{
-  "data_video_id" : "G63TF6OMa_8",
-  "a_href" : "player.php?id=G63TF6OMa_8&file=caption_G63TF6OMa_8",
-  "img_src" : "https://cdn.voicetube.com/assets/thumbnails/G63TF6OMa_8_s.jpg",
-  "img_alt" : "世上最人口密集的海島 (Living on the Most Crowded Island on Earth) Image",
-  "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-  "img_readed_alt" : " ",
-  "img_readed_rel" : "tooltip",
-  "img_readed_data_original_title" : "Watched",
-  "video_time" : "01:31",
-  "data_original_title" : "世上最人口密集的海島 (Living on the Most Crowded Island on Earth)",
-  "h5_a_href" : "世上最人口密集的海島 (Living on the Most Crowded Island…",
-  "view" : "2956 views",
-  "level" : "初級",
-  "level_href" : "/all/1/?ref=badge",
-  "chinese_caption" : "中文",
-  "chinese_tag" : "有中文字幕",
-  "chinese_href" : "/channel/translated?ref=badge",
-  "pronounciation" : "美國腔",
-  "pronounciation_tag" : "美國腔",
-  "pronounciation_href" : "/all/0?accent=us&amp;ref=badge"
-},{
-  "data_video_id" : "Hvysy11716g",
-  "a_href" : "player.php?id=Hvysy11716g&file=caption_Hvysy11716g",
-  "img_src" : "https://cdn.voicetube.com/assets/thumbnails/Hvysy11716g_s.jpg",
-  "img_alt" : "為何我們都會選擇難搞的伴侶？ (Why We Pick Difficult Partners) Image",
-  "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-  "img_readed_alt" : " ",
-  "img_readed_rel" : "tooltip",
-  "img_readed_data_original_title" : "Watched",
-  "video_time" : "05:46",
-  "data_original_title" : "為何我們都會選擇難搞的伴侶？ (Why We Pick Difficult Partners)",
-  "h5_a_href" : "為何我們都會選擇難搞的伴侶？ (Why We Pick Difficult Partners)",
-  "view" : "3286 views",
-  "level" : "中級",
-  "level_href" : "/all/2/?ref=badge",
-  "chinese_caption" : "中文",
-  "chinese_tag" : "有中文字幕",
-  "chinese_href" : "/channel/translated?ref=badge",
-  "pronounciation" : "美國腔",
-  "pronounciation_tag" : "美國腔",
-  "pronounciation_href" : "/all/0?accent=us&amp;ref=badge"
-},{
-  "data_video_id" : "NGtt7GJ1uiM",
-  "a_href" : "player.php?id=NGtt7GJ1uiM&file=caption_NGtt7GJ1uiM",
-  "img_src" : "https://cdn.voicetube.com/assets/thumbnails/NGtt7GJ1uiM_s.jpg",
-  "img_alt" : "【TED-Ed】你解得開蛋掉落的謎題嗎？ (Can you solve the egg drop riddle? - Yossi Elran) Image",
-  "img_readed" : "https://cdn.voicetube.com/assets/img/readed_btn.png",
-  "img_readed_alt" : " ",
-  "img_readed_rel" : "tooltip",
-  "img_readed_data_original_title" : "Watched",
-  "video_time" : "04:47",
-  "data_original_title" : "【TED-Ed】你解得開蛋掉落的謎題嗎？ (Can you solve the egg drop riddle? - Yossi Elran)",
-  "h5_a_href" : "【TED-Ed】你解得開蛋掉落的謎題嗎？ (Can you solve the egg drop…",
-  "view" : "2857 views",
-  "level" : "初級",
-  "level_href" : "/all/1/?ref=badge",
-  "chinese_caption" : "中文",
-  "chinese_tag" : "有中文字幕",
-  "chinese_href" : "/channel/translated?ref=badge",
-  "pronounciation" : "美國腔",
-  "pronounciation_tag" : "美國腔",
-  "pronounciation_href" : "/all/0?accent=us&amp;ref=badge"
-}]
-STRING;
+}
+catch(Exception $e)
+{
+  header('HTTP/1.1 400 Bad request'); 
+  echo $e->getMessage();
+}
 
 # Convert all JSON string to object 
 $contents = json_decode($jContent);
 $ads = json_decode($jAd);
+
 #var_dump($contents);
 ?>
 
@@ -261,7 +69,7 @@ $ads = json_decode($jAd);
 	                    <span class="icon-bar"></span> 
                		</button>
 
-					<a class="navbar-brand" href="index.html">
+					<a class="navbar-brand" href="index.php">
 						<img class="img-logo" src="https://cdn.voicetube.com/assets/img/vt_logo-with_icon-170111-white.png">
 					</a>
 				</div>
@@ -536,19 +344,20 @@ print $thumbHtml;
 								<!--  use php to insert advertise -->
 
 <?php
-# Inserting Ad's HTML
+# Inserting Ad to HTML
 $adHtml = '';
 foreach($ads as $ad)
 {
-	$adHtml .= '<li>';
-		$adHtml .= '<div>';
-			$adHtml .= '<a target="_blank" href="' . $ad->href . '">' . $ad->title . '</a>';
-			$adHtml .= '<div class="short_company">' . $ad->company . '</div>';
-		$adHtml .= '</div>';
-	$adHtml .= '</li>';
+print <<<STRING
+                      <li>
+		                    <div>
+			                     <a target="_blank" href="$ad->href">$ad->title</a>
+			                     <div class="short_company">$ad->company</div>
+		                    </div>
+	                    </li>
+STRING;
 }
-# Output to HTML
-print $adHtml;
+
 ?>
 
 	             				</ol>

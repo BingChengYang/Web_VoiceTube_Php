@@ -12,8 +12,10 @@ if($_SERVER['REQUEST_METHOD'] == 'GET')
 
     	# Retreive caption JSON data
     	$filePath = 'captions/' . $file .'.JSON';
-    	if(is_readable($filePath))	$captions = file_get_contents($filePath);
-    	else 						throw new Exception("Cannot find captions!");
+    	if(is_readable($filePath))	
+    		$captions = file_get_contents($filePath);
+    	else 						
+    		throw new Exception("Cannot find captions!");
 
     	$captions = json_decode($captions);
 
@@ -60,9 +62,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET')
 		<script type="text/javascript">	
 			var videoId = '<?php echo $id; ?>';
 		</script>
-		<script async type="text/javascript" src="js/caption.js"></script>
 
-		
 	</head>
 
 	<body>
@@ -78,7 +78,7 @@ if($_SERVER['REQUEST_METHOD'] == 'GET')
 	                    <span class="icon-bar"></span> 
                		</button>
 
-					<a class="navbar-brand" href="index.html">
+					<a class="navbar-brand" href="index.php">
 						<img class="img-logo" src="https://cdn.voicetube.com/assets/img/vt_logo-with_icon-170111-white.png">
 					</a>
 				</div>
@@ -291,9 +291,19 @@ if($_SERVER['REQUEST_METHOD'] == 'GET')
 								<div id="caption_detail" >
 								<!-- Use php to insert caption -->
 <?php
-foreach($caption as $captions)
+# Insert caption to HTML
+foreach($captions->en as $key => $caption)
 {
-	
+print <<<STRING
+									<div id="show-caption-table">
+										<td class="align-top" width="25">
+											<a href="javascript:;" onclick="playCaptions('$caption->start', '$caption->dur')">
+												<span class="glyphicon glyphicon-play"></span>
+											</a>
+										</td>
+										<td id="seq-$key" start="$caption->start" end="$caption->dur">$caption->text</td>
+									</div>
+STRING;
 }
 ?>
 								</div>
