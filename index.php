@@ -2,31 +2,42 @@
 # Load JSON Data
 $contentPath = "content.JSON";
 $adPath = "ad.JSON";
-try
-{
-  # Load content from JSON file
-  if(is_readable($contentPath))  
-    $jContent = file_get_contents($contentPath);
-  else                           
-    throw new Exception("Cannot load content!");
+if($_SERVER['REQUEST_METHOD'] == 'GET'){
+	try
+	{
+	  $page = filter_input(INPUT_GET, 'page', FILTER_SANITIZE_URL);
+	  if($page == null) $page = 1;
 
-  # Read ad from JSON file
-  if(is_readable($adPath))  
-    $jAd = file_get_contents($adPath);
-  else                           
-    throw new Exception("Cannot load ad!");
+	  # Load content from JSON file
+	  if(is_readable($contentPath))  
+	    $jContent = file_get_contents($contentPath);
+	  else                           
+	    throw new Exception("Cannot load content!");
 
+	  # Read ad from JSON file
+	  if(is_readable($adPath))  
+	    $jAd = file_get_contents($adPath);
+	  else                           
+	    throw new Exception("Cannot load ad!");
+
+	}
+	catch(Exception $e)
+	{
+	  header('HTTP/1.1 400 Bad request'); 
+	  echo $e->getMessage();
+	}
+
+	# Convert all JSON string to object 
+	$contents = json_decode($jContent);
+	$ads = json_decode($jAd);
+	
+	$maxShowVedio = 9;
+	if(4*$page >$maxShowVedio){
+		$numShowVedio = $maxShowVedio;
+	}else{
+		$numShowVedio = 4*$page;
+	}
 }
-catch(Exception $e)
-{
-  header('HTTP/1.1 400 Bad request'); 
-  echo $e->getMessage();
-}
-
-# Convert all JSON string to object 
-$contents = json_decode($jContent);
-$ads = json_decode($jAd);
-
 #var_dump($contents);
 ?>
 
@@ -258,16 +269,18 @@ $ads = json_decode($jAd);
 		<div class="container">
 			<div class="index-block">
 				<div class="row">
-
+					<!--  Video part -->
 					<div id="thumb" class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+						<div class="row">
 						<div id="newVideoTitle">New Videos</div>
 						<!--  use php to insert thumbnails -->
 
 <?php
 # Inserting thumbnail's HTML
 $thumbHtml = '';
-foreach($contents as $thumb)
+for($i=0; $i<$numShowVedio; $i++)
 {
+	$thumb = $contents[$i];
 	# first line is rwd
 	$thumbHtml .= '<div class="col-xs-6 col-sm-4 col-md-3 col-lg-3">';
 		# thumbnail's div
@@ -331,38 +344,44 @@ foreach($contents as $thumb)
 # Output to HTML
 print $thumbHtml;
 ?>
-
+						</div>
+						<div class="row">
+							<div class="col-xs-4 col-sm-4 col-md-5 col-lg-5">
+							</div>
+							<div class="col-xs-8 col-sm-8 col-md-7 col-lg-7">
+							<a href="index.php?page=<?php print ($page+1);?>"><button type="button" class="btn btn-success">More Vedios</button></a>
+							</div>
+						</div>
 					</div>
 
+					<!--  AD part -->
 					<div class="col-xs-0 col-sm-0 col-md-3 col-lg-3">
 						<div class="qbox index-sidebar span3">
-	      					<div id="ad"><a href="/lessons/?apilang=zh_tw">看更多</a></div>
-	    					<h3>英文學習課程</h3>
+		  					<div id="ad"><a href="/lessons/?apilang=zh_tw">看更多</a></div>
+							<h3>英文學習課程</h3>
 							<div class="clearfix"></div>
-	    					<div>
-	       						<ol id="sidecol" class="shortlist">
+							<div>
+		   						<ol id="sidecol" class="shortlist">
 								<!--  use php to insert advertise -->
-
 <?php
 # Inserting Ad to HTML
 $adHtml = '';
 foreach($ads as $ad)
 {
 print <<<STRING
-                      <li>
-		                    <div>
-			                     <a target="_blank" href="$ad->href">$ad->title</a>
-			                     <div class="short_company">$ad->company</div>
-		                    </div>
-	                    </li>
+				                      <li>
+						                    <div>
+							                     <a target="_blank" href="$ad->href">$ad->title</a>
+							                     <div class="short_company">$ad->company</div>
+						                    </div>
+					                    </li>
 STRING;
 }
 
 ?>
-
-	             				</ol>
-	    					</div>
-   						</div>
+         						</ol>
+							</div>
+						</div>
 					</div>
 				</div>
 			</div>

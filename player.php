@@ -286,10 +286,9 @@ if($_SERVER['REQUEST_METHOD'] == 'GET')
 					</span>
 
 					<span class="mode-section col-xs-0 col-sm-0 col-md-0 col-lg-5" >
-
 						<div class="caption-section" >
-								<div id="caption_detail" >
-								<!-- Use php to insert caption -->
+							<div id="caption_detail" >
+							<!-- Use php to insert caption -->
 <?php
 # Insert caption to HTML
 foreach($captions->en as $key => $caption)
@@ -306,18 +305,11 @@ print <<<STRING
 STRING;
 }
 ?>
-								</div>
-								
+							</div>
 						</div>
-						
 					</span>
 				</div>
 			</div>
-	</div>
-
-		
-	</body>
-
-	
-	
+		</div>
+	</body>	
 </html>
