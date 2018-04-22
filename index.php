@@ -32,10 +32,13 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
 	$ads = json_decode($jAd);
 	
 	$maxShowVedio = 9;
-	if(4*$page >$maxShowVedio){
+	$pageShowVideo = 4;
+	$showMoreBtn = true;
+	if($pageShowVideo*$page >= $maxShowVedio){
 		$numShowVedio = $maxShowVedio;
+		$showMoreBtn = false;
 	}else{
-		$numShowVedio = 4*$page;
+		$numShowVedio = $pageShowVideo*$page;
 	}
 }
 #var_dump($contents);
@@ -349,7 +352,12 @@ print $thumbHtml;
 							<div class="col-xs-4 col-sm-4 col-md-5 col-lg-5">
 							</div>
 							<div class="col-xs-8 col-sm-8 col-md-7 col-lg-7">
-							<a href="index.php?page=<?php print ($page+1);?>"><button type="button" class="btn btn-success">More Vedios</button></a>
+<?php
+if($showMoreBtn)
+{
+print							'<a href="index.php?page=' . ($page+1) . '"><button type="button" class="btn btn-success">More Vedios</button></a>';
+}
+?>							
 							</div>
 						</div>
 					</div>
